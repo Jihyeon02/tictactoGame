@@ -12,45 +12,7 @@ function App() {
   ]);
   const [winner, setWinner] = useState(null);
   const [nextPlayerName, setNextPlayerName] = useState("X");
-
-  function Game() {
-  const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
-  const [stepNumber, setStepNumber] = useState(0);
-  const [xIsNext, setXIsNext] = useState(true);
-
-  const current = history[stepNumber];
-  const winner = calculateWinner(current.squares);
-
-  const handleClick = (i) => {
-    const nextHistory = history.slice(0, stepNumber + 1);
-    const currentStep = nextHistory[nextHistory.length - 1];
-    const squares = currentStep.squares.slice();
-    if (winner || squares[i]) return;
-
-    squares[i] = xIsNext ? "X" : "O";
-    setHistory(nextHistory.concat([{ squares }]));
-    setStepNumber(nextHistory.length);
-    setXIsNext(!xIsNext);
-  };
-
-  const jumpTo = (move) => {
-    setStepNumber(move);
-    setXIsNext(move % 2 === 0);
-  };
-
-  const moves = history.map((step, move) => {
-    const desc = move ? `Go to move #${move}` : "Go to game start";
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{desc}</button>
-      </li>
-    );
-  });
-
-  const status = winner
-    ? `Winner: ${winner}`
-    : `Next player: ${xIsNext ? "X" : "O"}`;
-  }
+  const [history, setHistory] = useState(null);
   
   function handleClick(rowIndex, squareIndex) {
     console.log(rowIndex, squareIndex);
@@ -69,13 +31,9 @@ function App() {
     
   }
   return (
-    <div className="game">
-      <div className="game-board">
-        <Board squares={squares} onClick={handleClick} />
-      </div>
-      <div className="game-info">
-        <ol>{moves}</ol>
-      </div>
+    <div>
+      <div>{winner === null ? `Next Player : ${nextPlayerName}` : `Winner is ${winner}`}</div>
+      <Board board={board} onItemClick={handleClick}/>
     </div>
   );
 
